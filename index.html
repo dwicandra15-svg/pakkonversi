@@ -41,6 +41,8 @@ button,input,select,textarea{font:inherit} button{cursor:pointer;border:0}.app{d
 .mark{cursor:pointer;overflow:hidden;position:relative;flex:none}.mark img{width:100%;height:100%;object-fit:contain;display:block}.mark.has-logo{border-color:rgba(255,255,255,.35);background:#fff;padding:3px}
 .logo-tools{display:flex;gap:6px;margin:-18px 0 24px;font-size:11px}.logo-tools button{background:rgba(255,255,255,.12);color:#dbeaee;border-radius:7px;padding:5px 9px;font-size:11px}.logo-tools button:hover{background:rgba(255,255,255,.22);color:#fff}.logo-tools button[hidden]{display:none}
 .main{padding-bottom:56px}
+.dropzone{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px dashed var(--line);border-radius:12px;padding:16px;margin-top:12px;transition:.15s}.dropzone.over{border-color:var(--teal);background:#eef9f7}
+.note.ok{border-left-color:var(--success);background:#e9f6ef;color:#14543a}.note.err{border-left-color:var(--danger);background:#fbeaea;color:#7a2b2b}
 .dev-mark{position:fixed;right:14px;bottom:10px;z-index:50;font-size:11px;color:var(--muted);background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:999px;padding:4px 12px;pointer-events:none;user-select:none;letter-spacing:.02em;box-shadow:0 2px 8px rgba(18,48,71,.08)}
 @media(max-width:650px){.logo-tools{margin:-6px 0 12px}.dev-mark{right:50%;transform:translateX(50%);white-space:nowrap}}
 </style>
@@ -49,8 +51,9 @@ button,input,select,textarea{font:inherit} button{cursor:pointer;border:0}.app{d
 <div class="app">
 <aside class="side no-print"><div class="brand"><div class="mark" id="appMark" title="Klik untuk mengunggah logo">PAK</div><div><b>PAK Konversi</b><small>Elektronik</small></div></div><div class="logo-tools no-print"><button type="button" id="logoBtn">Unggah logo</button><button type="button" id="logoReset" hidden>Hapus</button><input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif" hidden></div><nav class="nav"><button class="active" data-section="input">01&nbsp; Entri Data</button><button data-section="calc">02&nbsp; Perhitungan</button><button data-section="print">03&nbsp; Dokumen Cetak</button></nav><div class="side-note">Single HTML offline<br>Data tersimpan di perangkat ini<br><br>Versi aplikasi 1.0</div></aside>
 <main class="main">
-<header class="top no-print"><div><div class="eyebrow">Pemerintah Kabupaten Sampang</div><h1 class="title">PAK Konversi</h1><p class="subtitle">Form elektronik untuk konversi predikat kinerja menjadi angka kredit.</p></div><div class="actions"><button class="btn secondary" id="saveBtn">Simpan</button><button class="btn ghost" id="resetBtn">Reset contoh</button></div></header>
+<header class="top no-print"><div><div class="eyebrow">Pemerintah Kabupaten Sampang</div><h1 class="title">PAK Konversi</h1><p class="subtitle">Form elektronik untuk konversi predikat kinerja menjadi angka kredit.</p></div><div class="actions"><button class="btn primary" id="importBtnTop">Upload PAK Konversi</button><button class="btn secondary" id="saveBtn">Simpan</button><button class="btn ghost" id="resetBtn">Reset contoh</button></div></header>
 <section id="input" class="section active">
+<div class="card no-print"><h2>Impor Data dari Excel</h2><p class="help">Unggah file <b>PAK Konversi</b> (.xlsx) yang sudah diisi pada sheet <b>ENTRI DATA</b>. Semua isian di bawah akan terisi otomatis. File dibaca langsung di perangkat ini dan tidak dikirim ke mana pun.</p><div class="dropzone" id="dropZone"><button class="btn primary" id="importBtn" type="button">Upload PAK Konversi</button><span class="hint">atau tarik &amp; lepas file .xlsx ke sini</span></div><div id="importResult"></div><input type="file" id="importFile" accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
 <div class="card no-print"><h2>Riwayat Penyimpanan Lokal</h2><p class="help">Isian terbaru tersimpan otomatis di browser. Gunakan tombol simpan untuk membuat titik riwayat yang dapat dipulihkan.</p><div class="actions"><select id="historySelect" style="min-width:280px"><option value="">— belum ada riwayat —</option></select><button class="btn secondary" id="restoreBtn">Pulihkan</button><button class="btn ghost" id="deleteHistoryBtn">Hapus Riwayat</button></div></div>
 <div class="card"><h2>Data yang Dinilai / Guru</h2><p class="help">Isi data identitas dan jabatan. Kolom bertanda * wajib diisi.</p><div class="grid">
 <div class="field span2"><label>Nama *</label><input id="nama" data-key="nama"></div><div class="field"><label>NIP *</label><input id="nip" data-key="nip"></div><div class="field"><label>Karpeg</label><input id="karpeg" data-key="karpeg"></div><div class="field span2"><label>Tempat, Tanggal Lahir</label><input id="ttl" data-key="ttl"></div><div class="field"><label>Jenis Kelamin</label><select id="gender" data-key="gender"><option value="1">Laki-laki</option><option value="2">Perempuan</option></select></div><div class="field"><label>Pangkat / Golongan Ruang s.d. 2025</label><select id="grade" data-key="grade"></select></div><div class="field"><label>Pangkat / Golongan Ruang Tahun 2026</label><select id="grade2026" data-key="grade2026"></select><span class="hint">Jika naik pangkat pada 2026, pilih golongan baru di sini. Jika tidak naik, samakan dengan golongan sebelumnya.</span></div><div class="field"><label>TMT Golongan</label><input id="tmtGol" type="date" data-key="tmtGol"></div><div class="field"><label>TMT Jabatan</label><input id="tmtJab" type="date" data-key="tmtJab"></div><div class="field span2"><label>Unit Kerja</label><input id="unit" data-key="unit"></div><div class="field"><label>Kecamatan</label><input id="kecamatan" data-key="kecamatan"></div><div class="field full"><label>Alamat Sekolah</label><textarea id="alamat" data-key="alamat"></textarea></div><div class="field span2"><label>Email / Website 1</label><input id="email1" data-key="email1"></div><div class="field"><label>Email / Website 2</label><input id="email2" data-key="email2"></div>
@@ -102,5 +105,129 @@ function applyLogo(u){const m=$('appMark');if(u){m.innerHTML='<img alt="Logo">';
 function loadLogoFile(f){if(!f)return;if(!/^image\//.test(f.type))return toast('File harus berupa gambar');if(f.size>5*1024*1024)return toast('Ukuran gambar maksimal 5 MB');const r=new FileReader();r.onerror=()=>toast('Gagal membaca gambar');r.onload=()=>{const done=u=>{try{localStorage.setItem(LOGO_KEY,u)}catch(e){toast('Logo aktif, tetapi gagal disimpan permanen')}applyLogo(u);toast('Logo diperbarui')};if(f.type==='image/svg+xml')return done(r.result);const im=new Image();im.onerror=()=>toast('Gambar tidak dapat dibuka');im.onload=()=>{const max=256,k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);done(c.toDataURL(f.type==='image/jpeg'?'image/jpeg':'image/png',.92))};im.src=r.result};r.readAsDataURL(f)}
 $('appMark').addEventListener('click',()=>$('logoFile').click());$('logoBtn').addEventListener('click',()=>$('logoFile').click());$('logoFile').addEventListener('change',e=>{loadLogoFile(e.target.files[0]);e.target.value=''});$('logoReset').addEventListener('click',()=>{try{localStorage.removeItem(LOGO_KEY)}catch(e){}applyLogo(null);toast('Logo dihapus')});
 try{applyLogo(localStorage.getItem(LOGO_KEY))}catch(e){}
+
+/* ===== Impor PAK Konversi dari Excel (.xlsx) — offline, tanpa library tambahan ===== */
+async function zipOpen(buf){
+ const dv=new DataView(buf),u8=new Uint8Array(buf),files={};
+ let e=u8.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;
+ if(e<0)throw new Error('File bukan format Excel (.xlsx) yang valid.');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);
+ for(let i=0;i<n&&dv.getUint32(p,true)===0x02014b50;i++){
+  const nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true);
+  files[new TextDecoder().decode(u8.subarray(p+46,p+46+nl))]={method:dv.getUint16(p+10,true),size:dv.getUint32(p+20,true),off:dv.getUint32(p+42,true)};
+  p+=46+nl+el+cl;
+ }
+ return{has:n=>!!files[n],async text(name){
+  const f=files[name];if(!f)throw new Error('Bagian file tidak ditemukan: '+name);
+  const s=f.off+30+dv.getUint16(f.off+26,true)+dv.getUint16(f.off+28,true),raw=u8.subarray(s,s+f.size);
+  if(f.method===0)return new TextDecoder().decode(raw);
+  if(f.method!==8)throw new Error('Metode kompresi file tidak didukung.');
+  const out=await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer();
+  return new TextDecoder().decode(out);
+ }};
+}
+const xmlDoc=t=>new DOMParser().parseFromString(t,'application/xml');
+const NS_REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+function sheetRows(xml,sst){
+ const rows=[];
+ for(const r of xmlDoc(xml).getElementsByTagName('row')){
+  const o={};
+  for(const c of r.getElementsByTagName('c')){
+   const col=(c.getAttribute('r')||'').replace(/[0-9]/g,'');if(col!=='A'&&col!=='B')continue;
+   const t=c.getAttribute('t'),ve=c.getElementsByTagName('v')[0];let v=null;
+   if(t==='inlineStr')v=[...c.getElementsByTagName('t')].map(x=>x.textContent).join('');
+   else if(ve){v=ve.textContent;if(t==='s')v=sst[Number(v)]??'';else if(t==='b')v=v==='1'?'TRUE':'FALSE'}
+   o[col]={v,num:(t==null||t==='n')&&v!=null&&v!==''};
+  }
+  rows.push(o);
+ }
+ return rows;
+}
+const PAK_FIELDS={
+ guru:[[/^NAMA$/,'nama','text'],[/^NIP$/,'nip','text'],[/KARPEG/,'karpeg','text'],[/^TEMPAT/,'ttl','text'],[/^JENIS KELAMIN/,'gender','gender'],[/^PANGKAT/,'grade','grade'],[/^TMT GOL/,'tmtGol','date'],[/^TMT JAB/,'tmtJab','date'],[/^UNIT KERJA/,'unit','text'],[/^KECAMATAN/,'kecamatan','text'],[/^ALAMAT/,'alamat','text'],[/^EMAIL ?1/,'email1','text'],[/^EMAIL ?2/,'email2','text']],
+ kepala:[[/^NAMA$/,'kepalaNama','text'],[/^NIP$/,'kepalaNip','text'],[/^PANGKAT/,'kepalaGrade','grade'],[/PLT|DEVINITI|DEFINITIF/,'statusKepala','status']],
+ y2023:[[/^PAK INTEGRASI/,'pak2022','dec'],[/^PAK KONVERSI/,'pak2023','dec'],[/^PREDIKAT/,'pred2023','pred'],[/BULAN/,'bulan2023','bulan']],
+ y2024:[[/^PAK KONVERSI/,'pak2024','dec'],[/^PREDIKAT/,'pred2024','pred'],[/BULAN/,'bulan2024','bulan']],
+ now:[[/^PREDIKAT/,'predNow','pred'],[/^AWAL/,'awal','month'],[/^(AHIR|AKHIR)/,'akhir','month'],[/BULAN/,'bulanNow','bulan'],[/^TAHUN$/,'tahunNow','year']],
+ surat:[[/^NO/,'noSurat','text'],[/^TANGGAL/,'tglPenetapan','tgl']]
+};
+const PAK_LABEL={nama:'Nama guru',nip:'NIP guru',karpeg:'Karpeg',ttl:'Tempat/tgl lahir',gender:'Jenis kelamin',grade:'Pangkat/golongan',tmtGol:'TMT golongan',tmtJab:'TMT jabatan',unit:'Unit kerja',kecamatan:'Kecamatan',alamat:'Alamat sekolah',email1:'Email 1',email2:'Email 2',kepalaNama:'Nama kepala sekolah',kepalaNip:'NIP kepala sekolah',kepalaGrade:'Pangkat kepala sekolah',statusKepala:'Definitif/Plt',pak2022:'PAK integrasi 2022',pak2023:'PAK konversi 2023',pred2023:'Predikat 2023',bulan2023:'Jumlah bulan 2023',pak2024:'PAK konversi 2024',pred2024:'Predikat 2024',bulan2024:'Jumlah bulan 2024',predNow:'Predikat 2025',awal:'Awal penilaian',akhir:'Akhir penilaian',bulanNow:'Jumlah bulan 2025',tahunNow:'Tahun penilaian',noSurat:'Nomor surat keluar',tglPenetapan:'Tanggal penetapan'};
+const PAK_OPTIONAL=['karpeg','email1','email2','kecamatan'];
+const _pad=n=>String(n).padStart(2,'0');
+const _serial=n=>{n=Number(n);if(!(n>20000&&n<90000))return null;return new Date(Date.UTC(1899,11,30)+Math.round(n)*864e5)};
+const PAK_CONV={
+ text:c=>{const s=String(c.v??'').trim();return s===''?null:s},
+ gender:c=>{const s=String(c.v??'').trim().toLowerCase();if(s==='1'||/^laki|^pria/.test(s))return'1';if(s==='2'||/^perempuan|^wanita/.test(s))return'2';return null},
+ grade:c=>{const s=String(c.v??'').trim();if(/^\d+(\.0+)?$/.test(s)){const n=parseInt(s,10);return n>=1&&n<=12?String(n):null}const m=s.match(/\b(IV|III|II)\s*\/\s*([a-d])\b/i);if(!m)return null;const base={II:0,III:4,IV:8}[m[1].toUpperCase()];return String(base+m[2].toLowerCase().charCodeAt(0)-96)},
+ status:c=>{const s=String(c.v??'').trim().toLowerCase();if(s==='1'||/^def/.test(s))return'1';if(s==='2'||/^plt|^pelaksana/.test(s))return'2';return null},
+ dec:c=>{const n=parseFloat(String(c.v??'').replace(',','.'));return isNaN(n)?null:String(Math.round(n*1000)/1000)},
+ bulan:c=>{const n=parseFloat(String(c.v??'').replace(',','.'));return isNaN(n)||n<0||n>12?null:String(Math.round(n))},
+ year:c=>{const n=parseInt(String(c.v??''),10);return n>=2000&&n<=2100?String(n):null},
+ pred:c=>{const s=String(c.v??'').trim().toLowerCase();return Object.keys(predPct).find(k=>k.toLowerCase()===s)||null},
+ month:c=>{const s=String(c.v??'').trim().toLowerCase();if(/^\d+$/.test(s)&&+s>=1&&+s<=12)return months[+s-1];return months.find(m=>m.toLowerCase()===s)||months.find(m=>s.length>=3&&m.toLowerCase().startsWith(s.slice(0,3)))||null},
+ date:c=>{if(c.num){const d=_serial(c.v);return d?`${d.getUTCFullYear()}-${_pad(d.getUTCMonth()+1)}-${_pad(d.getUTCDate())}`:null}const s=String(c.v??'').trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return`${m[1]}-${_pad(m[2])}-${_pad(m[3])}`;m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);return m?`${m[3]}-${_pad(m[2])}-${_pad(m[1])}`:null},
+ tgl:c=>{if(c.num){const d=_serial(c.v);return d?`${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`:null}const s=String(c.v??'').trim();return s===''?null:s}
+};
+function extractPak(rows){
+ const norm=s=>String(s??'').toUpperCase().replace(/\s+/g,' ').trim(),out={};let sec='',hasil=0;
+ for(const r of rows){
+  const lab=norm(r.A&&r.A.v),val=r.B;if(!lab)continue;
+  const empty=!val||val.v==null||String(val.v).trim()==='';
+  if(empty){
+   let m;
+   if(/^DATA (YG|YANG) DINILAI|^DATA .*GURU/.test(lab)){sec='guru';continue}
+   if(/^DATA ATASAN/.test(lab)){sec='kepala';continue}
+   if(m=lab.match(/^HASIL PENILAIAN KINERJA\s*(\d{4})?/)){const y=m[1]||(['2023','2024'][hasil]||'');hasil++;sec=y==='2023'?'y2023':y==='2024'?'y2024':'now';continue}
+   if(/^SURAT KELUAR$/.test(lab)){sec='surat';continue}
+   continue;
+  }
+  const rule=(PAK_FIELDS[sec]||[]).find(f=>f[0].test(lab));
+  if(!rule||out[rule[1]]!==undefined)continue;
+  const v=PAK_CONV[rule[2]](val);if(v!==null)out[rule[1]]=v;
+ }
+ return out;
+}
+async function parsePakXlsx(buf){
+ const z=await zipOpen(buf),wb=xmlDoc(await z.text('xl/workbook.xml')),rels=xmlDoc(await z.text('xl/_rels/workbook.xml.rels')),rel={};
+ for(const r of rels.getElementsByTagName('Relationship'))rel[r.getAttribute('Id')]=r.getAttribute('Target');
+ const sst=[];
+ if(z.has('xl/sharedStrings.xml'))for(const si of xmlDoc(await z.text('xl/sharedStrings.xml')).getElementsByTagName('si')){let t='';for(const x of si.getElementsByTagName('t'))if(x.parentNode.localName!=='rPh')t+=x.textContent;sst.push(t)}
+ let sheets=[...wb.getElementsByTagName('sheet')].map(s=>({name:s.getAttribute('name'),path:(t=>t?(t[0]==='/'?t.slice(1):'xl/'+t):null)(rel[s.getAttributeNS(NS_REL,'id')||s.getAttribute('r:id')])})).filter(s=>s.path&&z.has(s.path));
+ sheets.sort((a,b)=>(/entri\s*data/i.test(b.name)?1:0)-(/entri\s*data/i.test(a.name)?1:0));
+ for(const s of sheets){
+  const data=extractPak(sheetRows(await z.text(s.path),sst));
+  if(data.nama||data.nip)return{data,sheet:s.name};
+ }
+ throw new Error('Data guru tidak ditemukan. Pastikan file adalah PAK Konversi dengan sheet "ENTRI DATA" yang sudah terisi.');
+}
+function buildImported(x){
+ const d={};for(const k of Object.keys(PAK_LABEL))d[k]=x[k]!==undefined?x[k]:'';
+ d.grade2026=d.grade;d.pred2026='';d.bulan2026='0';d.tahun2026='2026';
+ return d;
+}
+async function importFromFile(f){
+ const box=$('importResult'),show=(cls,html)=>{box.innerHTML=`<div class="note ${cls}">${html}</div>`};
+ if(!f)return;
+ try{
+  if(/\.xls$/i.test(f.name))throw new Error('Format .xls (Excel lama) belum didukung. Buka file di Excel lalu pilih Simpan Sebagai → .xlsx.');
+  if(!/\.xls[xm]$/i.test(f.name))throw new Error('File harus berformat Excel (.xlsx).');
+  if(typeof DecompressionStream==='undefined')throw new Error('Browser terlalu lama untuk membaca Excel. Gunakan Chrome, Edge, atau Firefox versi terbaru.');
+  show('','Membaca file…');
+  const {data,sheet}=await parsePakXlsx(await f.arrayBuffer());
+  try{const h=readHistory();h.unshift({label:'Sebelum impor '+new Date().toLocaleString('id-ID'),data:get()});localStorage.setItem(HISTORY_KEY,JSON.stringify(h.slice(0,20)));renderHistory()}catch(e){}
+  const full=buildImported(data);load(full);$('ptkSelect').value='';saveLatest();
+  const missing=Object.keys(PAK_LABEL).filter(k=>data[k]===undefined&&!PAK_OPTIONAL.includes(k)).map(k=>PAK_LABEL[k]),filled=Object.keys(data).length;
+  show(missing.length?'':'ok',`<b>Berhasil mengimpor ${esc(data.nama||'data')}</b>${data.nip?' (NIP '+esc(data.nip)+')':''} dari sheet “${esc(sheet)}” — ${filled} kolom terisi.`+(missing.length?`<br>Belum terbaca, mohon lengkapi manual: <b>${missing.map(esc).join(', ')}</b>.`:'<br>Periksa kembali isian di bawah, lalu lanjut ke tab Perhitungan atau Dokumen Cetak.'));
+  toast('Data berhasil diimpor');window.scrollTo({top:0,behavior:'smooth'});
+ }catch(e){show('err','<b>Gagal mengimpor.</b> '+esc(e.message||e))}
+}
+(function(){
+ const inp=$('importFile'),dz=$('dropZone');
+ for(const id of ['importBtn','importBtnTop'])$(id).addEventListener('click',()=>inp.click());
+ inp.addEventListener('change',e=>{importFromFile(e.target.files[0]);e.target.value=''});
+ ['dragenter','dragover'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add('over')}));
+ ['dragleave','drop'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove('over')}));
+ dz.addEventListener('drop',e=>importFromFile(e.dataTransfer.files[0]));
+})();
 </script>
 </body></html>
